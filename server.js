@@ -109,6 +109,15 @@ app.get('/add-instruments', (req,res) => {
         })
 })
 
+app.get('/instruments/search', async (req, res) => {
+    const intruments = await InstrumentModal.find({name:req.query.name})
+    try {
+        res.send(intruments)
+    }catch (e) {
+        res.status(304).send('error')
+    }
+})
+
 function addInstruments(instruments) {
     return new Promise.all(instruments.map((instrument) => {
         return new Promise(async (resolve, reject) => {
