@@ -110,7 +110,8 @@ app.get('/add-instruments', (req,res) => {
 })
 
 app.get('/instruments/search', async (req, res) => {
-    const intruments = await InstrumentModal.find({name:req.query.name})
+    const regex = new RegExp(req.query.name);
+    const intruments = await InstrumentModal.find({name:regex})
     try {
         res.send(intruments)
     }catch (e) {
