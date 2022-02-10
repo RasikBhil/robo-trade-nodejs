@@ -90,6 +90,10 @@ db.once("open", function () {
 //         })
 // })
 
+app.get('/',(req, res) => {
+    res.send({status:200, message:'working'})
+})
+
 app.get('/add-instruments', (req,res) => {
     fetch('https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json')
         .then((res) => res.json())
@@ -120,6 +124,6 @@ function addInstruments(instruments) {
 }
 
 
-const server = app.listen(3030, () => {
+const server = app.listen(process.env.PORT || 3030, () => {
     console.log('Server listning on port', 3030)
 })
