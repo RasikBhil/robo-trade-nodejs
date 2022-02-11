@@ -17,6 +17,7 @@
     "mongodb": "^4.3.1",
     "mongoose": "^6.2.1",
     "node-fetch": "^3.0.0",
-    "request-promise": "^4.2.6"
+    "request-promise": "^4.2.6",
+    "swagger-ui-express": "^4.3.0"
   }
 }

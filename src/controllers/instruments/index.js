@@ -28,7 +28,7 @@ router.get('/search', async (req, res) => {
             ]
         })
     try {
-        res.send(instrumentModel)
+        res.status(200).send(instrumentModel)
     }catch (e) {
         res.status(304).send('error')
     }

@@ -1,0 +1,86 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Robo Trades",
+    "description": "Robo Trades Application API",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "https://robo-trades.herokuapp.com/",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Instruments",
+      "description": "API for Instruments in the system"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/instruments/search" : {
+      "get": {
+        "tags": ["Instruments"],
+        "summary": "Search instruments",
+        "responses": {
+          "200": {
+            "description": "ok",
+            "schema": {
+              "$ref": "#/definitions/Instruments"
+            }
+          }
+        },
+        "parameters": [{
+          "name": "name",
+          "in": "query",
+          "schema": {
+            "type": "string"
+          }
+        }]
+      }
+    }
+  },
+  "definitions": {
+    "Instruments": {
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "exch_seg": {
+          "type": "string"
+        },
+        "expiry": {
+          "type": "string"
+        },
+        "instrumenttype": {
+          "type": "string"
+        },
+        "lotsize": {
+          "type": "string"
+        },
+        "name":{
+          "type": "string"
+        },
+        "strike": {
+          "type": "string"
+        },
+        "symbol":{
+          "type": "string"
+        },
+        "tick_size":{
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "__v":{
+          "type": "number"
+        }
+      }
+    }
+  }
+}
+
