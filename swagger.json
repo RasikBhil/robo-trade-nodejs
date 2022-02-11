@@ -9,7 +9,7 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "robo-trades.herokuapp.com/",
+  "host": "robo-trades.herokuapp.com",
   "basePath": "/",
   "tags": [
     {
