@@ -41,6 +41,17 @@
           }
         }]
       }
+    },
+    "/instruments/add-instruments": {
+      "get": {
+        "tags": ["Instruments"],
+        "summary": "[DO NOT USE] add instruments to database",
+        "responses": {
+          "200": {
+            "description": "Add Instruments from Angleone API to database"
+          }
+        }
+      }
     }
   },
   "definitions": {
