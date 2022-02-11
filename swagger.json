@@ -9,7 +9,7 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "https://robo-trades.herokuapp.com/",
+  "host": "robo-trades.herokuapp.com/",
   "basePath": "/",
   "tags": [
     {
@@ -17,7 +17,7 @@
       "description": "API for Instruments in the system"
     }
   ],
-  "schemes": ["http"],
+  "schemes": ["https"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
