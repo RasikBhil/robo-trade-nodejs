@@ -22,18 +22,16 @@ router.get('/add-instruments', (req, res) => {
 
 router.get('/search', async (req, res) => {
     const regex = new RegExp(req.query.name.toUpperCase());
+    const page = req.query.page;
+    const skip = 10 * (page - 1);
+
     const instrumentModel = await instruments.find(
         {$or:[
             {name:{'$in':[regex]}},{symbol:{'$in':[regex]}}
             ]
-        })
+        }).limit(10).skip(skip)
     try {
-        if(instrumentModel && instrumentModel.length > 50) {
-            const spliceArray = instrumentModel.slice(0,50);
-            res.send(spliceArray);
-        } else {
-            res.send(instrumentModel)
-        }
+        res.send(instrumentModel)
     }catch (e) {
         res.status(304).send('error')
     }
