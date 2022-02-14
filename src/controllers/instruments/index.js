@@ -28,7 +28,12 @@ router.get('/search', async (req, res) => {
             ]
         })
     try {
-        res.status(200).send(instrumentModel)
+        if(instrumentModel && instrumentModel.length > 50) {
+            const spliceArray = instrumentModel.slice(0,50);
+            res.send(spliceArray);
+        } else {
+            res.send(instrumentModel)
+        }
     }catch (e) {
         res.status(304).send('error')
     }
