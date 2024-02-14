@@ -1,69 +1,80 @@
-import express from 'express';
+import express from "express";
 import { createRequire } from "module";
+import WebSocketV2 from "./src/services/node_socket.js";
 const require = createRequire(import.meta.url);
 const app = express();
-app.use(express.urlencoded({ extended: false }))
-app.use(express.json())
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-import { createServer } from 'https';
-import WebSocket, { WebSocketServer } from 'ws';
-import swaggerUi from 'swagger-ui-express';
-const swaggerDocument = require('./swagger.json');
-import instrumentController from './src/controllers/instruments/index.js'
-import websocketController from './src/controllers/webSocket/index.js'
+let server = require("http").createServer();
+let WSServer = require("ws").Server;
+import swaggerUi from "swagger-ui-express";
+const swaggerDocument = require("./swagger.json");
+import crypto from "crypto";
+import instrumentController from "./src/controllers/instruments/index.js";
+const wss = new WSServer({ server: server });
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/instruments", instrumentController);
+app.get("/", (req, res) => {
+  res.send({ status: 200, message: "working" });
+});
 
-const server = createServer(app);
-const wss = new WebSocketServer({ server });
+server.on("request", app);
 
-wss.on('connection', function (ws) {
-    const id = setInterval(function () {
-        ws.send(JSON.stringify(process.memoryUsage()), function () {
-            console.log('started client');
-            //
-            // Ignore errors.
-            //
-        });
-    }, 100);
-    console.log('started client');
+wss.on("connection", function (ws, req) {
+  console.log("WS", req.url);
+  let params = new URL(`http://dummy.com${req.url}`).searchParams;
+  let clientCode = params.get("clientCode");
+  let feedToken = params.get("feedToken");
+  let apiKey = params.get("apiKey");
+  console.log("query", clientCode, feedToken, apiKey);
 
-    ws.on('error', console.error);
+  let angleOneSocket = new WebSocketV2({
+    jwttoken: "JWT_TOKEN",
+    apikey: apiKey,
+    clientcode: clientCode,
+    feedtype: feedToken,
+  });
 
-    ws.on('close', function () {
-        console.log('stopping client interval');
-        clearInterval(id);
+  angleOneSocket.customError((evt) => {
+    console.log("ERROR", evt);
+    ws.send(evt);
+  });
+
+  angleOneSocket
+    .connect()
+    .then((e) => {
+      console.log("open", e);
+      angleOneSocket.on("tick", receiveTick);
+      function receiveTick(data) {
+        console.log("receiveTick:::::");
+        // setStocks(data);
+        if (data !== "pong") {
+          ws.send(JSON.stringify(data));
+        }
+      }
+    })
+    .catch((err) => {
+      console.log("Custom error :", err.message);
+      ws.close();
     });
+
+  ws.on("message", (evt) => {
+    console.log("json request", JSON.parse(evt));
+    angleOneSocket.fetchData(JSON.parse(evt));
+  });
+
+  ws.on("error", console.error);
+
+  ws.on("close", function () {
+    console.log("stopping client interval");
+    if (angleOneSocket.close) {
+      angleOneSocket?.close();
+    }
+  });
 });
 
-
-server.listen(3030, () => {
-    console.log('Listening on http://localhost:3030');
+server.listen(process.env.PORT || 3030, () => {
+  console.log("Server listning on port http://localhost:3030/");
 });
-
-
-// app.use('/websocket',
-//     (req, res) => {
-//         setTimeout(function timeout() {
-
-//             ws.send(Date.now());
-//         }, 500)
-//     }
-// )
-
-// app.use(
-//     '/api-docs',
-//     swaggerUi.serve,
-//     swaggerUi.setup(swaggerDocument)
-// );
-// app.use('/instruments', instrumentController)
-
-// // app.use('/websocket', websocketController)
-
-// app.get('/', (req, res) => {
-//     res.send({ status: 200, message: 'working' })
-// })
-
-
-// const serverssss = app.listen(process.env.PORT || 3030, () => {
-//     console.log('Server listning on port http://localhost:3030/')
-// })
