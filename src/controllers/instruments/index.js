@@ -1,6 +1,6 @@
 import express from "express";
 import fetch from "node-fetch";
-import {addInstruments} from "./services.js";
+import { addInstruments } from "./services.js";
 const router = express.Router();
 import db from '../../datasource/index.js'
 const instruments = db.instrumentModel;
@@ -13,7 +13,7 @@ router.get('/add-instruments', (req, res) => {
         .then( async response => {
             try {
                 await addInstruments(response)
-                res.send({message:'success'});
+                res.send({ message: 'success' });
             } catch (error) {
                 res.send(error);
             }
@@ -26,13 +26,14 @@ router.get('/search', async (req, res) => {
     const skip = 10 * (page - 1);
 
     const instrumentModel = await instruments.find(
-        {$or:[
-            {name:{'$in':[regex]}},{symbol:{'$in':[regex]}}
+        {
+            $or: [
+                { name: { '$in': [regex] } }, { symbol: { '$in': [regex] } }
             ]
         }).limit(10).skip(skip)
     try {
         res.send(instrumentModel)
-    }catch (e) {
+    } catch (e) {
         res.status(304).send('error')
     }
 })

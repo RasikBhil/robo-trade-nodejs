@@ -1,20 +1,16 @@
 import schedule from 'node-schedule';
-
+import { deleteInstruments } from '../controllers/instruments/services.js'
 
 const rule = new schedule.RecurrenceRule();
-rule.dayOfWeek = [0, new schedule.Range(4, 6)];
-rule.hour = 17;
-rule.minute = 0;
+rule.dayOfWeek = [0, new schedule.Range(0, 6)];
+rule.hour = 8;
+// rule.minute = 5;
+// rule.second = 30;
 
 export const job = schedule.scheduleJob(rule, function () {
 
-
-    console.log('Today is recognized by Rebecca Black!');
+    deleteInstruments();
+    console.log('instrument deleted successfully!================================');
+    fetch('http://localhost:3030/instruments/add-instruments');
+    console.log('New instrument Data are being added might take 2 minutes!================================');
 });
-
-
-// const startTime = new Date(Date.now() + 5000);
-// const endTime = new Date(startTime.getTime() + 5000);
-// export const job = schedule.scheduleJob({ start: startTime, end: endTime, rule: '*/1 * * * * *' }, function () {
-//     console.log('Time for tea!');
-// });

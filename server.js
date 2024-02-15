@@ -79,6 +79,4 @@ wss.on("connection", function (ws, req) {
 
 server.listen(process.env.PORT || 3030, () => {
     console.log("Server listning on port http://localhost:3030/", "job is ruunning");
-
-    job;
 });
