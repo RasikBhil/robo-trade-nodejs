@@ -3,9 +3,9 @@ import { deleteInstruments, deleteSchedularStatus, fetchInstrumentData } from '.
 
 const instrumentRule = new schedule.RecurrenceRule();
 instrumentRule.dayOfWeek = [0, new schedule.Range(0, 6)];
-instrumentRule.hour = 17;
-instrumentRule.minute = 4;
-instrumentRule.second = 45;
+instrumentRule.hour = 18;
+// instrumentRule.minute = 9;
+// instrumentRule.second = 25;
 
 export const instrumentJob = schedule.scheduleJob(instrumentRule, function () {
 
