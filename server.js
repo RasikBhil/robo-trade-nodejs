@@ -10,9 +10,8 @@ let server = require("http").createServer();
 let WSServer = require("ws").Server;
 import swaggerUi from "swagger-ui-express";
 const swaggerDocument = require("./swagger.json");
-import crypto from "crypto";
 import instrumentController from "./src/controllers/instruments/index.js";
-import { job } from "./src/services/scheduler.js";
+import { instrumentJob, statusJob } from "./src/services/scheduler.js";
 
 const wss = new WSServer({ server: server });
 
