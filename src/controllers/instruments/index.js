@@ -1,6 +1,5 @@
 import express from "express";
-import fetch from "node-fetch";
-import {addInstruments} from "./services.js";
+import { fetchInstrumentData } from "./services.js";
 const router = express.Router();
 import db from '../../datasource/index.js'
 const instruments = db.instrumentModel;
@@ -8,16 +7,7 @@ const instruments = db.instrumentModel;
 
 
 router.get('/add-instruments', (req, res) => {
-    fetch('https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json')
-        .then((res) => res.json())
-        .then( async response => {
-            try {
-                await addInstruments(response)
-                res.send({message:'success'});
-            } catch (error) {
-                res.send(error);
-            }
-        })
+    fetchInstrumentData()
 })
 
 router.get('/search', async (req, res) => {
@@ -26,13 +16,14 @@ router.get('/search', async (req, res) => {
     const skip = 10 * (page - 1);
 
     const instrumentModel = await instruments.find(
-        {$or:[
-            {name:{'$in':[regex]}},{symbol:{'$in':[regex]}}
+        {
+            $or: [
+                { name: { '$in': [regex] } }, { symbol: { '$in': [regex] } }, { exch_seg: { '$in': [regex] } }
             ]
         }).limit(10).skip(skip)
     try {
         res.send(instrumentModel)
-    }catch (e) {
+    } catch (e) {
         res.status(304).send('error')
     }
 })
