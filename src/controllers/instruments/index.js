@@ -18,6 +18,7 @@ router.get("/search", async (req, res) => {
       $or: [
         { name: { $in: [regex] } },
         { symbol: { $in: [regex] } },
+        { token: { $in: [regex] } },
         { exch_seg: { $in: [regex] } },
       ],
     })
