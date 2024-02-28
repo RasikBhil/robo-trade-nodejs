@@ -12,6 +12,7 @@ import swaggerUi from "swagger-ui-express";
 const swaggerDocument = require("./swagger.json");
 import instrumentController from "./src/controllers/instruments/index.js";
 import favouritesController from "./src/controllers/favourites/index.js";
+import defaultFavouritesController from "./src/controllers/defaultFavourites/index.js";
 import { instrumentJob, statusJob } from "./src/services/scheduler.js";
 
 const wss = new WSServer({ server: server });
@@ -19,6 +20,7 @@ const wss = new WSServer({ server: server });
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/instruments", instrumentController);
 app.use("/favourites", favouritesController);
+app.use("/defaultfavourites", defaultFavouritesController);
 app.get("/", (req, res) => {
   res.send({ status: 200, message: "working" });
 });
