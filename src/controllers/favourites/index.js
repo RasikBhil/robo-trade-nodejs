@@ -9,10 +9,10 @@ import {
 } from "./services.js";
 const favourites = db.favouritesModel;
 
-router.get("/get-favourites", async (req, res) => {
+router.get("/get-favourites", (req, res) => {
   let client_ID = req.query.client_ID;
 
-  await favourites.findOne({ client_ID: client_ID }).then((resp) => {
+  favourites.findOne({ client_ID: client_ID }).then((resp) => {
     if (resp) {
       res.status(200).json(successRes(resp));
     } else {

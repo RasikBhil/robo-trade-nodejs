@@ -9,7 +9,7 @@ const addInstruments = (instruments) => {
     return new Promise(async (resolve, reject) => {
       const instrumentModel = new instrumentsDB(instrument);
       try {
-        await instrumentModel.save();
+        instrumentModel.save();
         resolve({ message: "instruments added" });
       } catch (error) {
         reject(error);
@@ -19,8 +19,8 @@ const addInstruments = (instruments) => {
   // );
 };
 
-const deleteInstruments = async () => {
-  await instrumentsDB.collection
+const deleteInstruments = () => {
+  instrumentsDB.collection
     .drop()
     .then(() => {
       console.log("instrument collection droped successfully");
@@ -35,10 +35,9 @@ const fetchInstrumentData = () => {
     "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json"
   )
     .then((res) => res.json())
-    .then(async (response) => {
+    .then((response) => {
       try {
-        await addInstruments(response);
-
+        addInstruments(response);
         addSchedularStatus("Data Added Successfully");
       } catch (error) {
         addSchedularStatus(
@@ -49,8 +48,8 @@ const fetchInstrumentData = () => {
     });
 };
 
-const addSchedularStatus = async (status) => {
-  await schedularJobsDB.collection
+const addSchedularStatus = (status) => {
+  schedularJobsDB.collection
     .insertOne({ timeStamp: moment(new Date()).format("llll"), status: status })
     .then(() => {
       console.log("schedularJob status added successfully of:-", status);
@@ -60,8 +59,8 @@ const addSchedularStatus = async (status) => {
     });
 };
 
-const deleteSchedularStatus = async () => {
-  await schedularJobsDB.collection
+const deleteSchedularStatus = () => {
+  schedularJobsDB.collection
     .drop()
     .then(() => {
       console.log("schedularJob collection droped successfully");
