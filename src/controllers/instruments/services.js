@@ -41,9 +41,6 @@ const fetchInstrumentData = () => {
 
         addSchedularStatus("Data Added Successfully");
       } catch (error) {
-        console.log("=================ERROR===================");
-        console.log(error);
-        console.log("====================================");
         addSchedularStatus(
           "error while adding instrument data , error:-",
           JSON.stringify(error)
@@ -59,7 +56,7 @@ const addSchedularStatus = async (status) => {
       console.log("schedularJob status added successfully of:-", status);
     })
     .catch((e) => {
-      console.log("error occured while inserting schedular job status", e);
+      console.log("error occured while inserting schedular job status");
     });
 };
 

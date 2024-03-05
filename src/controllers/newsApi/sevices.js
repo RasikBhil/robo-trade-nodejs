@@ -18,16 +18,14 @@ export const newsAPITopHeadlines = (res) => {
       country: "in",
     })
     .then((response) => {
-      console.log(response);
       res.status(200).json({ success: true, result: response });
     })
     .catch((e) => {
-      console.log("ERROR", e);
+      console.log("ERROR in top headlines", e);
       res.status(500).json({ success: false, result: "Error" });
     });
 };
 export const newsAPIEverything = (res) => {
-  console.log(oldDate);
   newsapi.v2
     .everything({
       q: "stock",
@@ -39,7 +37,6 @@ export const newsAPIEverything = (res) => {
       sortBy: "relevancy",
     })
     .then((response) => {
-      // console.log(response);
       res.status(200).json({ success: true, result: response });
     })
     .catch((e) => {

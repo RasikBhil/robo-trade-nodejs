@@ -15,10 +15,7 @@ instrumentRule.hour = 8;
 export const instrumentJob = schedule.scheduleJob(instrumentRule, function () {
   deleteInstruments()
     .then(() => {
-      console.log(
-        "instrument deleted successfully!================================\n"
-      );
-
+      console.log("instrument deleted successfully!====================\n");
       addSchedularStatus("Data Deleted");
       fetchInstrumentData();
     })

@@ -20,8 +20,6 @@ export const errorRes = (errorCode, message) => {
 const addToFavourite = async (client_ID, token, res) => {
   if (client_ID && token) {
     const isExist = await favourites.findOne({ client_ID: client_ID });
-    console.log("IS EXIST", isExist);
-    // console.log("IS EXIST", !isExist.favourites.includes(token));
     // if (!isExist.favourites.includes(token)) {
     if (isExist) {
       if (
@@ -83,8 +81,6 @@ const deleteFromFavourite = async (client_ID, token, res) => {
           });
         })
         .catch((e) => {
-          console.log("error", e);
-          console.log("====================================");
           res.json({
             success: false,
             result: `Error on instument delete = ${e} `,
