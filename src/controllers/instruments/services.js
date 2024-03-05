@@ -56,7 +56,7 @@ const addSchedularStatus = async (status) => {
   await schedularJobsDB.collection
     .insertOne({ timeStamp: moment(new Date()).format("llll"), status: status })
     .then(() => {
-      console.log("schedularJob status added successfully");
+      console.log("schedularJob status added successfully of:-", status);
     })
     .catch((e) => {
       console.log("error occured while inserting schedular job status", e);

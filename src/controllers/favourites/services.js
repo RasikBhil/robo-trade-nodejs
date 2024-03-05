@@ -35,7 +35,7 @@ const addToFavourite = async (client_ID, token, res) => {
         return;
       }
 
-      await favourites
+      favourites
         .findOneAndUpdate(
           { _id: isExist._id },
           { $push: { favourites: token } },
@@ -55,7 +55,7 @@ const addToFavourite = async (client_ID, token, res) => {
         client_ID: client_ID,
         favourites: [token],
       };
-      await favourites.create(doc).then(() =>
+      favourites.create(doc).then(() =>
         res.status(200).json({
           success: true,
           result: "new client_ID and instument added successfully",

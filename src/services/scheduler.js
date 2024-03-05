@@ -1,5 +1,6 @@
 import schedule from "node-schedule";
 import {
+  addSchedularStatus,
   deleteInstruments,
   deleteSchedularStatus,
   fetchInstrumentData,
@@ -17,9 +18,12 @@ export const instrumentJob = schedule.scheduleJob(instrumentRule, function () {
       console.log(
         "instrument deleted successfully!================================\n"
       );
+
+      addSchedularStatus("Data Deleted");
       fetchInstrumentData();
     })
     .catch((e) => {
+      addSchedularStatus("Error while Deleting Data");
       console.log("error while deleting instrument data", e);
     });
 });
