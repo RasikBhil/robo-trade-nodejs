@@ -20,8 +20,6 @@ export const errorRes = (errorCode, message) => {
 const addToFavourite = async (client_ID, token, res) => {
   if (client_ID && token) {
     const isExist = await favourites.findOne({ client_ID: client_ID });
-    console.log("IS EXIST", isExist);
-    // console.log("IS EXIST", !isExist.favourites.includes(token));
     // if (!isExist.favourites.includes(token)) {
     if (isExist) {
       if (
@@ -35,7 +33,7 @@ const addToFavourite = async (client_ID, token, res) => {
         return;
       }
 
-      await favourites
+      favourites
         .findOneAndUpdate(
           { _id: isExist._id },
           { $push: { favourites: token } },
@@ -55,7 +53,7 @@ const addToFavourite = async (client_ID, token, res) => {
         client_ID: client_ID,
         favourites: [token],
       };
-      await favourites.create(doc).then(() =>
+      favourites.create(doc).then(() =>
         res.status(200).json({
           success: true,
           result: "new client_ID and instument added successfully",
@@ -83,8 +81,6 @@ const deleteFromFavourite = async (client_ID, token, res) => {
           });
         })
         .catch((e) => {
-          console.log("error", e);
-          console.log("====================================");
           res.json({
             success: false,
             result: `Error on instument delete = ${e} `,

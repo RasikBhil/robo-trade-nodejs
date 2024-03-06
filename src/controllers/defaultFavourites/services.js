@@ -19,8 +19,8 @@ export const getDefaultFavouriteInstuments = async (res) => {
 export const getTopDefaultFavouriteInstuments = (res) => {
   const newWatchlist = watchList.map((item) => {
     return {
-      exchName: item.exchName,
-      symbolName: item.symbolName,
+      exch_seg: item.exchName,
+      symbol: item.symbolName,
       token: item.token,
     };
   });
