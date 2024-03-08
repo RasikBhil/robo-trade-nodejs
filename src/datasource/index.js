@@ -4,6 +4,8 @@ import instrumentModel from "../models/instrument.js";
 import schedularJobs from "../models/schedularJob.js";
 import favouritesModel from "../models/favourites.js";
 
+mongoose.set("strictQuery", true);
+
 mongoose.connect(
   `mongodb+srv://admin:${password}@robotrade.5inrp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
   {},

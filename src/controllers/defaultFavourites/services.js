@@ -22,6 +22,7 @@ export const getTopDefaultFavouriteInstuments = (res) => {
       exch_seg: item.exchName,
       symbol: item.symbolName,
       token: item.token,
+      price: 0,
     };
   });
 
