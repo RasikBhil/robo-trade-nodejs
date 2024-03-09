@@ -30,7 +30,8 @@ export const newsAPIEverything = (res) => {
     .everything({
       q: "stock",
       sources: "bbc-news,the-verge",
-      domains: "moneycontrol.com",
+      domains:
+        "moneycontrol.com,livemint.com,economictimes.indiatimes.com,cnbctv18.com,news18.com,nifty50stocks.com",
       from: oldDate,
       to: todaysDate,
       language: "en",
