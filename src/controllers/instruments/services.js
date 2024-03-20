@@ -23,10 +23,13 @@ const deleteInstruments = () => {
   instrumentsDB.collection
     .drop()
     .then(() => {
-      console.log("instrument collection droped successfully");
+      console.log("instrument deleted successfully!====================\n");
+      addSchedularStatus("Data Deleted");
+      fetchInstrumentData();
     })
     .catch((e) => {
-      console.log("error while deleting whole instrument collection", e);
+      addSchedularStatus("Error while Deleting Data");
+      console.log("error while deleting instrument data", e);
     });
 };
 

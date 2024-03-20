@@ -12,17 +12,8 @@ instrumentRule.hour = 8;
 // instrumentRule.minute = 9;
 // instrumentRule.second = 25;
 
-export const instrumentJob = schedule.scheduleJob(instrumentRule, function () {
-  deleteInstruments()
-    .then(() => {
-      console.log("instrument deleted successfully!====================\n");
-      addSchedularStatus("Data Deleted");
-      fetchInstrumentData();
-    })
-    .catch((e) => {
-      addSchedularStatus("Error while Deleting Data");
-      console.log("error while deleting instrument data", e);
-    });
+export const instrumentJob = schedule.scheduleJob(instrumentRule, () => {
+  deleteInstruments();
 });
 
 const statusRule = new schedule.RecurrenceRule();
