@@ -33,22 +33,21 @@ const deleteInstruments = () => {
     });
 };
 
-const fetchInstrumentData = async () => {
+const fetchInstrumentData = () => {
   fetch(
     "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json"
   )
     .then((res) => res.json())
     .then((response) => {
-      try {
-        addSchedularStatus("Instrument data is being added");
-        addInstruments(response);
-        addSchedularStatus("Data Added Successfully");
-      } catch (error) {
-        addSchedularStatus(
-          "error while adding instrument data , error:-",
-          JSON.stringify(error)
-        );
-      }
+      addSchedularStatus("Instrument data is being added");
+      addInstruments(response);
+      addSchedularStatus("Data Added Successfully");
+    })
+    .catch((error) => {
+      addSchedularStatus(
+        "error while adding instrument data , error:-",
+        JSON.stringify(error)
+      );
     });
 };
 
