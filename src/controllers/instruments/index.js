@@ -5,7 +5,7 @@ import db from "../../datasource/index.js";
 const instruments = db.instrumentModel;
 
 router.get("/add-instruments", (req, res) => {
-  fetchInstrumentData();
+  fetchInstrumentData(res);
 });
 
 router.get("/search", async (req, res) => {

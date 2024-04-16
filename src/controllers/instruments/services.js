@@ -4,19 +4,21 @@ const instrumentsDB = db.instrumentModel;
 const schedularJobsDB = db.schedularJobs;
 
 const addInstruments = (instruments) => {
-  // return new Promise.all(
-  return instruments.map((instrument) => {
+    const allPromises = instruments.map((instrument) => {
     return new Promise(async (resolve, reject) => {
-      const instrumentModel = new instrumentsDB(instrument);
       try {
+        const instrumentModel = new instrumentsDB(instrument);
         instrumentModel.save();
         resolve({ message: "instruments added" });
       } catch (error) {
+        console.log('error',error)
         reject(error);
       }
     });
-  });
-  // );
+  })
+  console.log('PROMISE', allPromises);
+  //  new 
+   return Promise.all(allPromises).then(res => console.log('ALL PROMISE'));
 };
 
 const deleteInstruments = () => {
@@ -33,20 +35,27 @@ const deleteInstruments = () => {
     });
 };
 
-const fetchInstrumentData = () => {
+const fetchInstrumentData = (res) => {
   fetch(
     "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json"
   )
-    .then((res) => res.json())
-    .then((response) => {
-      addSchedularStatus("Instrument data is being added");
-      addInstruments(response);
-      addSchedularStatus("Data Added Successfully");
+    .then((resp) => resp.json())
+    .then(async (response) => {
+      // addSchedularStatus("Instrument data is being added");
+      try {
+        await deleteInstruments()
+        await addInstruments(response);
+        res.status(200).json({ success: true, message: 'Data Added Successfully'});
+      } catch(e) {
+        console.log('error',e);
+      }
+      
+      // addSchedularStatus("Data Added Successfully");
     })
     .catch((error) => {
       addSchedularStatus(
         "error while adding instrument data , error:-",
-        JSON.stringify(error)
+        error
       );
     });
 };
