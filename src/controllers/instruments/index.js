@@ -1,11 +1,11 @@
 import express from "express";
-import { fetchInstrumentData } from "./services.js";
+import { deleteInstruments } from "./services.js";
 const router = express.Router();
 import db from "../../datasource/index.js";
 const instruments = db.instrumentModel;
 
 router.get("/add-instruments", (req, res) => {
-  fetchInstrumentData(res);
+  deleteInstruments(res);
 });
 
 router.get("/search", async (req, res) => {

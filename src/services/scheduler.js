@@ -4,6 +4,7 @@ import {
   deleteInstruments,
   deleteSchedularStatus,
   fetchInstrumentData,
+  fetchInstrumentDataIntoFile,
 } from "../controllers/instruments/services.js";
 
 const instrumentRule = new schedule.RecurrenceRule();
@@ -13,7 +14,7 @@ instrumentRule.hour = 8;
 // instrumentRule.second = 25;
 
 export const instrumentJob = schedule.scheduleJob(instrumentRule, () => {
-  deleteInstruments();
+  fetchInstrumentDataIntoFile();
 });
 
 const statusRule = new schedule.RecurrenceRule();
