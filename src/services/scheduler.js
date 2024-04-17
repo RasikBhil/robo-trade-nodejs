@@ -1,9 +1,6 @@
 import schedule from "node-schedule";
 import {
-  addSchedularStatus,
-  deleteInstruments,
   deleteSchedularStatus,
-  fetchInstrumentData,
   fetchInstrumentDataIntoFile,
 } from "../controllers/instruments/services.js";
 

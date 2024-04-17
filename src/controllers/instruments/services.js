@@ -71,37 +71,32 @@ const fetchInstrumentData = (res) => {
     });
 };
 
-const deleteInstrumentDataFile = () => {
-  fs.exists("./src/utils/instrumentData.js", async (exists) => {
-    if (exists) {
-      //Show in green
-      console.log("File exists. Deleting now ...");
-      await fs.unlink("./src/utils/instrumentData.js");
-    } else {
-      //Show in red
-      console.log("File not found, so not deleting.");
-    }
-  });
-};
+// const deleteInstrumentDataFile = () => {
+//   fs.exists("./src/utils/instrumentData.js", async (exists) => {
+//     if (exists) {
+//       console.log("File exists. Deleting now ...");
+//       await fs.unlink("./src/utils/instrumentData.js");
+//     } else {
+//       console.log("File not found, so not deleting.");
+//     }
+//   });
+// };
 
-const fetchInstrumentDataIntoFile = () => {
+const fetchInstrumentDataIntoFile = (res) => {
   fetch(
     "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json"
   )
     .then((resp) => resp.json())
     .then(async (response) => {
       try {
-        fs.writeFile(
-          "./src/utils/instrumentData.js",
-          JSON.stringify(response),
-          (err) => {
-            if (err) {
-              console.error(err);
-              return;
-            }
-            console.log("Data written to file");
+        let data = `export const data = ${JSON.stringify(response)}`;
+        fs.writeFile("./src/utils/instrumentData.js", data, (err) => {
+          if (err) {
+            console.error(err);
+            return;
           }
-        );
+          console.log("Data written to file");
+        });
         res
           .status(200)
           .json({ success: true, message: "Data Added Successfully" });
@@ -146,5 +141,4 @@ export {
   addSchedularStatus,
   deleteSchedularStatus,
   fetchInstrumentDataIntoFile,
-  deleteInstrumentDataFile,
 };
