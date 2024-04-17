@@ -1,31 +1,37 @@
 import db from "../../datasource/index.js";
 import moment from "moment/moment.js";
+import fs from "fs";
+
 const instrumentsDB = db.instrumentModel;
 const schedularJobsDB = db.schedularJobs;
 
 const addInstruments = (instruments) => {
-  // return new Promise.all(
-  return instruments.map((instrument) => {
+  const allPromises = instruments.map((instrument) => {
     return new Promise(async (resolve, reject) => {
-      const instrumentModel = new instrumentsDB(instrument);
       try {
-        instrumentModel.save();
+        const instrumentModel = new instrumentsDB(instrument);
+        instrumentModel
+          .save()
+          .then((res) => console.log("data added in DB", res));
         resolve({ message: "instruments added" });
       } catch (error) {
+        console.log("error", error);
         reject(error);
       }
     });
   });
-  // );
+  console.log("PROMISE", allPromises);
+  //  new
+  return Promise.all(allPromises).then((res) => console.log("ALL PROMISE"));
 };
 
-const deleteInstruments = () => {
+const deleteInstruments = (res) => {
   instrumentsDB.collection
     .drop()
     .then(() => {
-      console.log("instrument deleted successfully!====================\n");
+      // console.log("instrument deleted successfully!====================\n");
       addSchedularStatus("Data Deleted");
-      fetchInstrumentData();
+      fetchInstrumentData(res);
     })
     .catch((e) => {
       addSchedularStatus("Error while Deleting Data");
@@ -33,40 +39,95 @@ const deleteInstruments = () => {
     });
 };
 
-const fetchInstrumentData = () => {
+const fetchInstrumentData = (res) => {
   fetch(
     "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json"
   )
-    .then((res) => res.json())
-    .then((response) => {
-      addSchedularStatus("Instrument data is being added");
-      addInstruments(response);
-      addSchedularStatus("Data Added Successfully");
+    .then((resp) => resp.json())
+    .then(async (response) => {
+      // addSchedularStatus("Instrument data is being added");
+      try {
+        // let counter = 1;
+        // const slicedResponseSize = 100;
+        // for (let i = 0; i < response.length; i += slicedResponseSize) {
+        //   const sliceResponse = response.slice(i, i + slicedResponseSize);
+        //   await addInstruments(sliceResponse);
+        //   console.log("chunk added", counter);
+        //   counter++;
+        // }
+        // console.log("res", response);
+
+        res
+          .status(200)
+          .json({ success: true, message: "Data Added Successfully" });
+      } catch (e) {
+        console.log("error", e);
+      }
+
+      // addSchedularStatus("Data Added Successfully");
     })
     .catch((error) => {
-      addSchedularStatus(
-        "error while adding instrument data , error:-",
-        JSON.stringify(error)
-      );
+      addSchedularStatus("error while adding instrument data , error:-", error);
     });
 };
 
-const addSchedularStatus = (status) => {
-  schedularJobsDB.collection
-    .insertOne({ timeStamp: moment(new Date()).format("llll"), status: status })
-    .then(() => {
-      console.log("schedularJob status added successfully of:-", status);
+// const deleteInstrumentDataFile = () => {
+//   fs.exists("./src/utils/instrumentData.js", async (exists) => {
+//     if (exists) {
+//       console.log("File exists. Deleting now ...");
+//       await fs.unlink("./src/utils/instrumentData.js");
+//     } else {
+//       console.log("File not found, so not deleting.");
+//     }
+//   });
+// };
+
+const fetchInstrumentDataIntoFile = (res) => {
+  fetch(
+    "https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json"
+  )
+    .then((resp) => resp.json())
+    .then(async (response) => {
+      try {
+        let data = `export const data = ${JSON.stringify(response)}`;
+        fs.writeFile("./src/utils/instrumentData.js", data, (err) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          console.log("Data written to file");
+        });
+        res
+          .status(200)
+          .json({ success: true, message: "Data Added Successfully" });
+      } catch (e) {
+        console.log("error", e);
+      }
     })
-    .catch((e) => {
-      console.log("error occured while inserting schedular job status");
+    .catch((error) => {
+      console.log(
+        "error while adding instrument data into file, error:-",
+        error
+      );
     });
+};
+const addSchedularStatus = async (status) => {
+  try {
+    await schedularJobsDB.collection.insertOne({
+      timeStamp: moment(new Date()).format("llll"),
+      status: status,
+    });
+    // console.log("schedularJob status added successfully of:-", status);
+  } catch (e) {
+    console.log("error occured while inserting schedular job status");
+  }
 };
 
 const deleteSchedularStatus = () => {
   schedularJobsDB.collection
     .drop()
     .then(() => {
-      console.log("schedularJob collection droped successfully");
+      console.log("schedularJob collection dropped successfully");
     })
     .catch((e) => {
       console.log("error while deleting whole schedularJob collection", e);
@@ -79,4 +140,5 @@ export {
   fetchInstrumentData,
   addSchedularStatus,
   deleteSchedularStatus,
+  fetchInstrumentDataIntoFile,
 };
