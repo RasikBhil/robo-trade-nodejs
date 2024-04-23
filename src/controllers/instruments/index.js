@@ -19,17 +19,23 @@ router.get("/search", async (req, res) => {
   let filteredData = data.filter((i) => {
     if (
       i.name.includes(regex) ||
-      i.symbol.includes(regex) ||
+      i.symbol.toUpperCase().includes(regex) ||
       i.token.includes(regex) ||
       i.exch_seg.includes(regex)
     ) {
-      if (i.exch_seg === "NSE" || i.exch_seg === "BSE") {
+      if (
+        i.exch_seg === "NSE" ||
+        i.exch_seg === "BSE" ||
+        i.exch_seg === "NFO" ||
+        i.exch_seg === "BFO"
+      ) {
         return i;
       }
     }
   });
 
-  filteredData = filteredData.slice(limit * page - limit, limit * page);
+  console.log("filtered data|", regex, "|");
+  // filteredData = filteredData.slice(limit * page - limit, limit * page);
 
   // const instrumentModel = await instruments
   //   .find({
