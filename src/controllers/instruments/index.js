@@ -34,8 +34,7 @@ router.get("/search", async (req, res) => {
     }
   });
 
-  console.log("filtered data|", regex, "|");
-  // filteredData = filteredData.slice(limit * page - limit, limit * page);
+  filteredData = filteredData.slice(limit * page - limit, limit * page);
 
   // const instrumentModel = await instruments
   //   .find({
